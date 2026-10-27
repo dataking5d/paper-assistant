@@ -1,0 +1,83 @@
+name: writing
+version: "0.1.0"
+description: >
+  Academic writing assistance — draft sections, restructure papers, and
+  generate outlines following academic conventions.
+  Uses Static/Dynamic Split: loads only the prompt fragments that match
+  the detected section, language, and paper_type axes.
+category: capability
+
+axes:
+  section:
+    detect: "章节检测"
+    values:
+      abstract: static/fragments/section/abstract.md
+      intro: static/fragments/section/intro.md
+      lit-review: static/fragments/section/lit-review.md
+      method: static/fragments/section/method.md
+      results: static/fragments/section/results.md
+      discussion: static/fragments/section/discussion.md
+      conclusion: static/fragments/section/conclusion.md
+      outline: static/fragments/section/outline.md
+    multi: true
+    default: intro
+
+  language:
+    detect: "语言检测"
+    values:
+      zh: static/fragments/language/zh.md
+      en: static/fragments/language/en.md
+      zh-to-en: static/fragments/language/zh-to-en.md
+    multi: false
+    default: zh
+
+  paper_type:
+    detect: "论文类型检测"
+    values:
+      thesis: static/fragments/paper_type/thesis.md
+      journal: static/fragments/paper_type/journal.md
+    multi: false
+    default: thesis
+
+always_load:
+  - ../../capabilities/_shared/ethics.md
+  - ../../capabilities/_shared/terminology-ledger.md
+  - ../../capabilities/_shared/confirmation-gate.md
+  - static/core/stance.md
+  - static/core/workflow.md
+
+fragments:
+  section:
+    abstract: static/fragments/section/abstract.md
+    intro: static/fragments/section/intro.md
+    lit-review: static/fragments/section/lit-review.md
+    method: static/fragments/section/method.md
+    results: static/fragments/section/results.md
+    discussion: static/fragments/section/discussion.md
+    conclusion: static/fragments/section/conclusion.md
+    outline: static/fragments/section/outline.md
+  language:
+    zh: static/fragments/language/zh.md
+    en: static/fragments/language/en.md
+    zh-to-en: static/fragments/language/zh-to-en.md
+  paper_type:
+    thesis: static/fragments/paper_type/thesis.md
+    journal: static/fragments/paper_type/journal.md
+
+references:
+  on_demand:
+    - condition: "需要章节结构示例"
+      path: references/section-structures.md
+    - condition: "中文学位论文写作规范"
+      path: references/chinese-thesis-conventions.md
+    - condition: "段落流畅性检查"
+      path: references/paragraph-flow.md
+
+requires:
+  - core.docx_parser
+  - core.reference_kb
+
+calls_citation_engine: true
+
+entry_point: capabilities.writing.handler:handle
+cli_command: null

@@ -1,0 +1,203 @@
+# Derived from blader/humanizer (MIT) and op7418/Humanizer-zh (MIT).
+# See ../provenance.md and the project THIRD_PARTY_NOTICES.md.
+version: "humanizer-zh-31+humanizer-en-26@1"
+
+zh:
+  words:
+    - 赋能
+    - 闭环
+    - 深入探讨
+    - 至关重要
+    - 无缝
+    - 全方位
+    - 多维度
+    - 底层逻辑
+    - 顶层设计
+    - 抓手
+    - 范式
+    - 生态
+    - 有效地
+    - 显著地
+  technical_whitelist:
+    - 闭环控制
+    - 鲁棒
+    - 鲁棒性
+    - 反馈闭环
+    - 生态位
+  inflated:
+    - 具有重要意义
+    - 具有重要价值
+    - 前景广阔
+    - 标志着
+    - 开创了
+    - 里程碑
+    - 前所未有的
+    - 不可或缺
+    - 彰显了
+    - 充分体现了
+  vague_authority:
+    - 专家认为
+    - 研究表明
+    - 数据显示
+    - 众所周知
+    - 业内普遍认为
+    - 有关研究认为
+  closing:
+    - 综上所述
+    - 总而言之
+    - 由此可见
+    - 总的来说
+    - 简而言之
+    - 让我们拭目以待
+  regex:
+    - id: zh.pattern.01.not_x_but_y
+      pattern: '不是[^。；]{0,50}?而是|并非[^。；]{0,50}?而是'
+      category: contrast
+      severity: low
+      reason: '假对比候选；两部分都提供信息时保留'
+      action: rewrite_clause
+    - id: zh.pattern.02.one_line_closer
+      pattern: '[。！？][^。！？]{1,10}[。！？]$'
+      category: rhythm
+      severity: low
+      reason: '段末短句收尾候选；承载新事实或作者强调时保留'
+      action: keep
+    - id: zh.pattern.04.staged_runup
+      pattern: '^(接下来|下面|让我们|首先让我们)[^。；]{0,30}[：:，,]'
+      category: filler
+      severity: low
+      reason: '起跑式铺垫候选；只预告下文时删除'
+      action: delete_filler
+    - id: zh.pattern.06.forced_triad
+      pattern: '[^。；]{0,20}、[^。；]{0,20}、[^。；]{0,20}'
+      category: rhythm
+      severity: low
+      no_escalate: true
+      reason: '三项并列候选；逐项检查是否提供独立信息'
+      action: merge
+    - id: zh.pattern.07.repeated_openings
+      pattern: '^(.{1,6})[^。]{0,20}。\1[^。]{0,20}。'
+      category: rhythm
+      severity: low
+      reason: '相邻句重复开头候选；有意排比时保留'
+      action: merge
+    - id: zh.pattern.08.dash_connector
+      pattern: '——.*——'
+      category: punctuation
+      severity: low
+      reason: '破折号连用候选；解释、插入或转折用途可保留'
+      action: split
+    - id: zh.pattern.17.vague_authority
+      pattern: '(专家认为|研究表明|数据显示|众所周知|业内普遍认为|有关研究认为)'
+      category: attribution
+      severity: high
+      reason: '模糊归因候选；需要具体来源，不能补造'
+      action: verify_citation
+    - id: zh.pattern.27.verb_ing
+      pattern: '进行[^。；]{0,12}?(测试|分析|研究|优化|调整|检查|评估|设计|管理|讨论)'
+      category: wordiness
+      severity: low
+      reason: '“进行+动词”候选；冗长时换直接动词'
+      action: rewrite_clause
+    - id: zh.pattern.30.with_development
+      pattern: '^(随着|在)[^。；]{0,40}?(的发展|背景下|时代)'
+      category: filler
+      severity: low
+      reason: '“随着……的发展”式开头候选；背景无独立信息时压缩'
+      action: delete_filler
+    - id: zh.pattern.31.closing_formula
+      pattern: '(综上所述|总而言之|由此可见|总的来说|简而言之|让我们拭目以待)[^。]*。?$'
+      category: closure
+      severity: medium
+      reason: '套话收尾候选；有实际内容的总结可保留'
+      action: delete_filler
+
+en:
+  words:
+    - delve
+    - tapestry
+    - landscape
+    - pivotal
+    - crucial
+    - seamless
+    - leverage
+    - robust
+    - foster
+    - navigate
+    - underscore
+    - testament
+    - moreover
+    - furthermore
+    - importantly
+  technical_whitelist:
+    - robust estimator
+    - robust standard error
+  inflated:
+    - plays a crucial role
+    - is a testament to
+    - underscores the importance
+    - in today's rapidly evolving
+    - unprecedented
+    - game-changing
+    - cutting-edge
+  vague_authority:
+    - experts believe
+    - studies show
+    - research suggests
+    - it is widely known
+    - many experts agree
+  closing:
+    - in conclusion
+    - to sum up
+    - all in all
+    - at the end of the day
+  regex:
+    - id: en.pattern.01.not_x_but_y
+      pattern: '\bnot\b[^.;]{0,60}\bbut\b|\bnot just\b[^.;]{0,40}\bbut\b'
+      category: contrast
+      severity: low
+      reason: 'Not-X-but-Y contrast candidate; keep when both sides add information'
+      action: rewrite_clause
+    - id: en.pattern.02.one_line_closer
+      pattern: '[.!?]\s*[A-Z][^.!?]{1,40}[.!?]$'
+      category: rhythm
+      severity: low
+      reason: 'One-line closer candidate; keep when it carries a new fact'
+      action: keep
+    - id: en.pattern.04.staged_runup
+      pattern: '^(Here.s the thing|Let.s dive in|Let.s take a look|It.s worth noting)'
+      category: filler
+      severity: low
+      reason: 'Staged run-up candidate; delete when it only announces the next sentence'
+      action: delete_filler
+    - id: en.pattern.09.qualifier_stack
+      pattern: '\b(may|might|could)\s+(potentially|possibly|perhaps)\b|\bit is important to note\b'
+      category: qualifier
+      severity: low
+      reason: 'Stacked qualifier candidate; preserve real uncertainty'
+      action: rewrite_clause
+    - id: en.pattern.13.inflated
+      pattern: '(plays? a crucial role|is a testament to|underscores? the importance|in today.s rapidly evolving)'
+      category: inflation
+      severity: high
+      reason: 'Inflated significance candidate; replace with the actual claim'
+      action: delete_filler
+    - id: en.pattern.17.vague_authority
+      pattern: '(experts believe|studies show|research suggests|it is widely known|many experts agree)'
+      category: attribution
+      severity: high
+      reason: 'Vague attribution candidate; require a specific source'
+      action: verify_citation
+    - id: en.pattern.31.closing_formula
+      pattern: '(In conclusion|To sum up|All in all|At the end of the day)[^.]*\.?$'
+      category: closure
+      severity: medium
+      reason: 'Formulaic closing candidate; keep only if it adds information'
+      action: delete_filler
+
+protection:
+  numbers: '\d+(?:\.\d+)?%?'
+  citations: '\[\d+(?:[-,，]\d+)*\]'
+  hedges: '可能|或许|大概|约|左右|似乎|推测|估计|相关|提示|未显著|不能排除|may|might|could|suggest|associated|cannot rule out'
+  negations: '不|无|未|没有|并非|不能|不得|未发现|不能排除|\bnot\b|\bno\b|\bnever\b'
+  attributions: '根据|来源|报告|年报|半年报|援引|据.{0,10}(统计|数据|报告)|according to|source'

@@ -1,0 +1,18 @@
+name: citation-assistant
+version: "0.2.0"
+description: Host Agent reasoning with offline evidence and safe document tools
+always_load:
+  - SKILL.md
+  - ../../USAGE.md
+workflows:
+  - name: parse
+    command: python main.py parse "{paper}" --json
+  - name: evidence
+    command: python main.py evidence "{source}"
+  - name: validate
+    command: python main.py edit --paper "{paper}" --edits "{edits}" --attempt "{attempt}" --validate-only
+  - name: apply
+    command: python main.py edit --paper "{paper}" --edits "{edits}" --attempt "{attempt}"
+outputs:
+  result:
+    description: Use the exact artifacts paths in the returned JSON; never scan old outputs

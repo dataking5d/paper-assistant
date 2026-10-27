@@ -1,0 +1,29 @@
+name: citation
+version: "1.0.0"
+description: >
+  Citation matching, generation, and insertion pipeline.
+  This is a thin wrapper over the existing core/ Citation Engine.
+  It delegates all actual work to core modules without modifying them.
+category: core-wrapper
+
+axes:
+  task_type:
+    values: [citation]
+
+always_load:
+  - ../../prompts/fragments/task/citation.md
+
+requires:
+  - core.agent
+  - core.citation_matcher
+  - core.citation_generator
+  - core.docx_editor
+  - core.docx_parser
+  - core.reference_kb
+  - core.retriever
+  - core.classifier
+  - core.style_config
+  - core.template_analyzer
+
+entry_point: capabilities.citation.handler:handle
+cli_command: agent

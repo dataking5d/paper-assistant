@@ -1,0 +1,61 @@
+name: humanizing
+version: "0.1.0"
+description: >
+  只读扫描中文/英文 AI 写作痕迹，输出段落锚点、findings 和保护快照；
+  Agent 决定是否改写，不自动改事实，不生成替换文本。
+category: capability
+
+axes:
+  language:
+    detect: "语言检测"
+    values:
+      zh: static/fragments/language/zh.md
+      en: static/fragments/language/en.md
+    multi: false
+    default: zh
+  genre:
+    detect: "文体检测"
+    values:
+      academic: static/fragments/genre/academic.md
+    multi: false
+    default: academic
+  mode:
+    detect: "扫描模式"
+    values:
+      scan_only: static/core/output-contract.md
+    multi: false
+    default: scan_only
+
+always_load:
+  - ../../capabilities/_shared/ethics.md
+  - ../../capabilities/_shared/terminology-ledger.md
+  - static/core/stance.md
+  - static/core/protection.md
+  - static/core/workflow.md
+  - static/core/severity.md
+
+fragments:
+  language:
+    zh: static/fragments/language/zh.md
+    en: static/fragments/language/en.md
+  genre:
+    academic: static/fragments/genre/academic.md
+  mode:
+    scan_only: static/core/output-contract.md
+
+references:
+  on_demand:
+    - condition: "需要完整中文模式清单"
+      path: references/patterns-zh-31.md
+    - condition: "需要完整英文模式清单"
+      path: references/patterns-en-26.md
+    - condition: "需要确定性扫描规则"
+      path: references/scanner-rules.yaml
+    - condition: "需要判断误报边界"
+      path: references/boundaries.md
+
+requires:
+  - core.humanize_scanner
+
+entry_point: capabilities.humanizing.handler:handle
+cli_command: humanize-scan
